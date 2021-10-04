@@ -1,13 +1,13 @@
 const { DataTypes } = require('sequelize');
-const db = require('../database/connection');
+const db = require('../../database/connection');
 
-const Priority = db.define('Priority', {
-    id: {
+const Priority = db.define('Priorities', {
+    priorityId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    description: DataTypes.STRING,
+    description: DataTypes.STRING(45),
     state: DataTypes.BOOLEAN
 });
 

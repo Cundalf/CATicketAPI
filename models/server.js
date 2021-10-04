@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const fileUpload = require('express-fileupload');
 const RateLimit = require('express-rate-limit');
 
-const User = require('../models/user');
+const User = require('./database/user');
 const db = require('../database/connection');
 
 class Server {

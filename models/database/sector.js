@@ -1,14 +1,14 @@
 const { DataTypes } = require('sequelize');
-const db = require('../database/connection');
+const db = require('../../database/connection');
 
-const TicketState = db.define('TicketState', {
-    id: {
+const Sector = db.define('Sectors', {
+    sectorId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    description: DataTypes.STRING,
+    description: DataTypes.STRING(45),
     state: DataTypes.BOOLEAN
 });
 
-module.exports = TicketState;
+module.exports = Sector;

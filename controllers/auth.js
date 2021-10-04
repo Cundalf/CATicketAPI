@@ -1,5 +1,5 @@
 const bcryptjs = require('bcryptjs');
-const User = require('../models/user');
+const User = require('../models/database/user');
 const { generateJWT } = require('../helpers/jwt');
 const _ = require('underscore');
 

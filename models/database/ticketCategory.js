@@ -1,14 +1,13 @@
 const { DataTypes } = require('sequelize');
-const db = require('../database/connection');
-const TicketSubCategory = require('./ticketSubCategory');
+const db = require('../../database/connection');
 
 const TicketCategory = db.define('TicketCategory', {
-    id: {
+    ticketCategoryId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    description: DataTypes.STRING,
+    description: DataTypes.STRING(45),
     state: DataTypes.BOOLEAN
 });
 
