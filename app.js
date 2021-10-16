@@ -1,5 +1,5 @@
 require('dotenv').config();
-const Server = require('./models/server');
+const Server = require('./src/models/server');
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
