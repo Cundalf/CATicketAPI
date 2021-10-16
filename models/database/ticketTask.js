@@ -1,17 +1,15 @@
 const { DataTypes } = require('sequelize');
 const db = require('../../database/connection');
 
-const TicketSubCategory = db.define('TicketSubCategories', {
-    ticketSubCategoryId: {
+const TicketTask = db.define('TicketTasks', {
+    ticketTaskId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
+    ticketSubCategory: DataTypes.INTEGER,
     description: DataTypes.STRING(45),
-    state: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-    }
+    state: DataTypes.BOOLEAN
 });
 
-module.exports = TicketSubCategory;
+module.exports = TicketTask;

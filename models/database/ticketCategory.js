@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../../database/connection');
+const ticketSubCategory = require('./ticketSubCategory');
 
 const TicketCategory = db.define('TicketCategory', {
     ticketCategoryId: {
@@ -8,7 +9,11 @@ const TicketCategory = db.define('TicketCategory', {
         autoIncrement: true,
     },
     description: DataTypes.STRING(45),
-    state: DataTypes.BOOLEAN
+    state: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    }
 });
 
+TicketCategory.hasMany(ticketSubCategory);
 module.exports = TicketCategory;

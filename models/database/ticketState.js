@@ -8,7 +8,10 @@ const TicketState = db.define('TicketStates', {
         autoIncrement: true,
     },
     description: DataTypes.STRING(45),
-    state: DataTypes.BOOLEAN
+    state: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    }
 });
 
 module.exports = TicketState;
