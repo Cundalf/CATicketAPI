@@ -11,6 +11,7 @@ const ticketTaskModel = require('./ticketTask');
 const sectorModel = require('./sector');
 const ticketStateModel = require('./ticketState');
 const orderModel = require('./order');
+const ticketUpdateModel = require('./ticketUpdates');
 
 const Ticket = db.define('Tickets', {
     ticketId: {
@@ -46,5 +47,6 @@ Ticket.belongsTo(ticketTaskModel, { foreignKey: 'ticketTask' });
 Ticket.belongsTo(sectorModel, { foreignKey: 'ticketSector' });
 Ticket.belongsTo(ticketStateModel, { foreignKey: 'ticketState' });
 Ticket.belongsTo(orderModel, { foreignKey: 'ticketOrder' });
+Ticket.hasMany(ticketUpdateModel);
 
 module.exports = Ticket;

@@ -60,12 +60,9 @@ class Server {
 
     async syncDB() {
         try {
-            const config = { alter: true };
-            
-            // Employee Models
-            await employeeDeviceTypeModel.sync(config);
-            await employeeDeviceModel.sync(config);
-            await employeeModel.sync(config);
+            //const config = { force: true };
+            //const config = { alter: true };
+            const config = {}; 
             
             // User Models
             await userModel.sync(config);
@@ -74,6 +71,11 @@ class Server {
             await headquarterModel.sync(config);
             await sectorModel.sync(config);
             await priorityModel.sync(config);
+            
+            // Employee Models
+            await employeeDeviceTypeModel.sync(config);
+            await employeeModel.sync(config);
+            await employeeDeviceModel.sync(config);
             
             // Ticket Aux Models
             await ticketCategoryModel.sync(config);

@@ -1,6 +1,9 @@
 const { DataTypes } = require('sequelize');
 const db = require('../../database/connection');
 
+const employeeDeviceModel = require('./employeeDevice');
+const sectorModel = require('./sector');
+
 const Employee = db.define('Employees', {
     employeeId: {
         type: DataTypes.INTEGER,
@@ -17,5 +20,8 @@ const Employee = db.define('Employees', {
     employeeEmail: DataTypes.STRING(90),
     state: DataTypes.BOOLEAN
 });
+
+Employee.belongsTo(sectorModel, { foreignKey: 'employeeSector' });
+Employee.hasMany(employeeDeviceModel);
 
 module.exports = Employee;
