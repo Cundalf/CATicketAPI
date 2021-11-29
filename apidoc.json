@@ -1,0 +1,15 @@
+{
+    "name": "CATicketAPI",
+    "version": "1.0.0",
+    "description": "",
+    "title": "CATicketAPI Documentation",
+    "url": "",
+    "header": {
+        "title": "Header",
+        "filename": "markdown/header.md"
+    },
+    "footer": {
+        "title": "Footer",
+        "filename": "markdown/footer.md"
+    }
+}
