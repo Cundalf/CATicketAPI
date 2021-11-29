@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import dotenv from 'dotenv';
 import Server from './models/server.model';
 import sourceMapSupport from 'source-map-support';
