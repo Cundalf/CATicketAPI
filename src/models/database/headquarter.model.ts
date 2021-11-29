@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
 
 const Headquarter = db.define('Headquarters', {
     headquarterId: {
@@ -12,4 +12,4 @@ const Headquarter = db.define('Headquarters', {
     state: DataTypes.BOOLEAN
 });
 
-module.exports = Headquarter;
+export default Headquarter;

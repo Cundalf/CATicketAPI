@@ -1,7 +1,6 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
-
-const employeeDeviceTypeModel = require('./employeeDeviceType');
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
+import employeeDeviceTypeModel from './employeeDeviceType.model';
 
 const EmployeeDevice = db.define('EmployeeDevices', {
     employeeDeviceId: {
@@ -19,4 +18,4 @@ const EmployeeDevice = db.define('EmployeeDevices', {
 
 EmployeeDevice.belongsTo(employeeDeviceTypeModel, { foreignKey: 'employeeDeviceType' });
 
-module.exports = EmployeeDevice;
+export default EmployeeDevice;

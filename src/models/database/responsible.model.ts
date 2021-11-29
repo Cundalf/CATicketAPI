@@ -1,8 +1,8 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
 
-const ticketModel = require('./ticket');
-const userModel = require('./user');
+import ticketModel from './ticket.model';
+import userModel from './user.model';
 
 const TicketResponsible = db.define('TicketResponsibles', {
     responsibleUser: {
@@ -18,4 +18,4 @@ const TicketResponsible = db.define('TicketResponsibles', {
 TicketResponsible.belongsTo(userModel, { foreignKey: 'responsibleUser' });
 TicketResponsible.belongsTo(ticketModel, { foreignKey: 'responsibleTicket' });
 
-module.exports = TicketResponsible;
+export default TicketResponsible;

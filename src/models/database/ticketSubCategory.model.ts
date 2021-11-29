@@ -1,8 +1,8 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
 
-const TicketState = db.define('TicketStates', {
-    ticketStateId: {
+const TicketSubCategory = db.define('TicketSubCategories', {
+    ticketSubCategoryId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -14,4 +14,4 @@ const TicketState = db.define('TicketStates', {
     }
 });
 
-module.exports = TicketState;
+export default TicketSubCategory;

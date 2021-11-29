@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
 
 const TicketUpdate = db.define('TicketUpdates', {
     ticketUpdateId: {
@@ -11,4 +11,4 @@ const TicketUpdate = db.define('TicketUpdates', {
     state: DataTypes.BOOLEAN
 });
 
-module.exports = TicketUpdate;
+export default TicketUpdate;

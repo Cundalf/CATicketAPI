@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
-const categoryModel = require("./ticketCategory");
-const subCategoryModel = require("./ticketSubCategory");
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
+import categoryModel from './ticketCategory.model';
+import subCategoryModel from './ticketSubCategory.model';
 
 const Documentation = db.define('Documentation', {
     documentationId: {
@@ -28,4 +28,4 @@ const Documentation = db.define('Documentation', {
 Documentation.belongsTo(categoryModel, { foreignKey: 'category' });
 Documentation.belongsTo(subCategoryModel, { foreignKey: 'subCategory' });
 
-module.exports = Documentation;
+export default Documentation;

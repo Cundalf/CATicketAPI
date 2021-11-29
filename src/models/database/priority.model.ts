@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
 
 const Priority = db.define('Priorities', {
     priorityId: {
@@ -11,4 +11,4 @@ const Priority = db.define('Priorities', {
     state: DataTypes.BOOLEAN
 });
 
-module.exports = Priority;
+export default Priority;

@@ -1,17 +1,17 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
 
-const headquarterModel = require('./headquarter');
-const priorityModel = require('./priority');
-const employeeModel = require('./employee');
-const userModel = require('./user');
-const ticketCategoryModel = require('./ticketCategory');
-const ticketSubCategoryModel = require('./ticketSubCategory');
-const ticketTaskModel = require('./ticketTask');
-const sectorModel = require('./sector');
-const ticketStateModel = require('./ticketState');
-const orderModel = require('./order');
-const ticketUpdateModel = require('./ticketUpdates');
+import headquarterModel from './headquarter.model';
+import priorityModel from './priority.model';
+import employeeModel from './employee.model';
+import userModel from './user.model';
+import ticketCategoryModel from './ticketCategory.model';
+import ticketSubCategoryModel from './ticketSubCategory.model';
+import ticketTaskModel from './ticketTask.model';
+import sectorModel from './sector.model';
+import ticketStateModel from './ticketState.model';
+import orderModel from './order.model';
+import ticketUpdateModel from './ticketUpdates.model';
 
 const Ticket = db.define('Tickets', {
     ticketId: {
@@ -49,4 +49,4 @@ Ticket.belongsTo(ticketStateModel, { foreignKey: 'ticketState' });
 Ticket.belongsTo(orderModel, { foreignKey: 'ticketOrder' });
 Ticket.hasMany(ticketUpdateModel);
 
-module.exports = Ticket;
+export default Ticket;

@@ -1,8 +1,8 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
+import { DataTypes } from 'sequelize';
 
-const employeeDeviceModel = require('./employeeDevice');
-const sectorModel = require('./sector');
+import db from '../../database/connection.db';
+import employeeDeviceModel from './employeeDevice.model';
+import sectorModel from './sector.model';
 
 const Employee = db.define('Employees', {
     employeeId: {
@@ -24,4 +24,4 @@ const Employee = db.define('Employees', {
 Employee.belongsTo(sectorModel, { foreignKey: 'employeeSector' });
 Employee.hasMany(employeeDeviceModel);
 
-module.exports = Employee;
+export default Employee;

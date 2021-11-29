@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
-const ticketSubCategory = require('./ticketSubCategory');
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
+import ticketSubCategory from './ticketSubCategory.model';
 
 const TicketCategory = db.define('TicketCategory', {
     ticketCategoryId: {
@@ -16,4 +16,5 @@ const TicketCategory = db.define('TicketCategory', {
 });
 
 TicketCategory.hasMany(ticketSubCategory);
-module.exports = TicketCategory;
+
+export default TicketCategory;

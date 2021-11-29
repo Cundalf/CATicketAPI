@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const db = require('../../database/connection');
+import { DataTypes } from 'sequelize';
+import db from '../../database/connection.db';
 
 const EmployeeDeviceType = db.define('EmployeeDeviceTypes', {
     employeeDeviceTypeId: {
@@ -11,4 +11,4 @@ const EmployeeDeviceType = db.define('EmployeeDeviceTypes', {
     state: DataTypes.BOOLEAN
 });
 
-module.exports = EmployeeDeviceType;
+export default EmployeeDeviceType;
