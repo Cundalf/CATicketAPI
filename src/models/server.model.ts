@@ -17,6 +17,7 @@ import morgan, { StreamOptions } from "morgan";
 
 // Database Connection
 // import db from '../database/connection.db';
+import { createConnection } from "typeorm";
 
 // Database Models
 // import userModel from './entities/user.model';
@@ -77,11 +78,28 @@ class Server {
         this.middlewares();
         this.logging();
         this.routes();
+        this.database();
     }
 
     private database(): void {
-        this.connectDB();
-        this.syncDB();
+        
+        createConnection({
+            type: "mysql",
+            host: "localhost",
+            port: 3306,
+            username: "root",
+            password: "",
+            database: "pruebas",
+            entities: [
+                __dirname + "/entities/*.entity.js"
+            ],
+            synchronize: true,
+        }).then(connection => {
+            console.log("Conectado");
+        }).catch(error => console.log(error));
+        
+        //this.connectDB();
+        //this.syncDB();
     }
 
     private async connectDB() {
