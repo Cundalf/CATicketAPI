@@ -12,7 +12,7 @@ export default class User {
     userId!: number;
     
     @Column('varchar', { length: 127 })
-    userFirstName!: number;
+    userFirstName!: string;
     
     @Column('varchar', { length: 127 })
     userLastName!: string;

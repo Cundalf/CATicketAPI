@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit';
 import fileUpload from 'express-fileupload';
 
 // Rutas
-//import Auth from '../routes/Auth';
+import Auth from '../routes/auth.route';
 //import Censo from '../routes/Censo';
 //import Cco from '../routes/Cco';
 
@@ -227,7 +227,7 @@ class Server {
         this.app.use(this.paths.doc, express.static(path.resolve(__dirname, '../../public/docs')));
 
         //* Rutas de servicios
-        //this.app.use(this.paths.auth, Auth);
+        this.app.use(this.paths.auth, Auth);
     }
 
     // Crea si no existe una instancia de la clase. Retorna la instancia en memoria.
