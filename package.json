@@ -4,7 +4,14 @@
   "description": "API del sistema CATicketJS",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf ./dist/ && tsc",
+    "prod": "npm run build && npm run doc",
+    "compile": "npm run build && node ./dist/app.js --enable-source-maps",
+    "dev": "nodemon -e ts --ignore *.json --exec \"npm run compile\"",
+    "test": "jest -i --forceExit --verbose",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest -i --forceExit --detectOpenHandles --watchAll --verbose",
+    "doc": "apidoc -c ./apidoc.json -i ./src/ -o ./public/docs/"
   },
   "author": "Agustin \"Cundalf\" Cundari",
   "license": "ISC",
