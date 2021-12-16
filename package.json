@@ -4,9 +4,8 @@
   "description": "API del sistema CATicketJS",
   "main": "app.js",
   "scripts": {
-    "build": "rm -rf ./dist/ && tsc",
-    "prod": "npm run build && npm run doc",
-    "compile": "npm run build && node ./dist/app.js --enable-source-maps",
+    "prod": "tsc && npm run doc",
+    "compile": "tsc && node ./dist/app.js --enable-source-maps",
     "dev": "nodemon -e ts --ignore *.json --exec \"npm run compile\"",
     "test": "jest -i --forceExit --verbose",
     "test:coverage": "jest --coverage",
