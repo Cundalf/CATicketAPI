@@ -6,22 +6,20 @@ import _ from 'underscore';
 
 export default class UserController {
 
-    private userRepository: Repository<User>;
-
-    constructor() {
-        this.userRepository = getRepository(User);
-    }
-
     public async getAllUsers(req: Request, res: Response) {
-        const users = await this.userRepository.find();
+        const userRepository: Repository<User> = getRepository(User);
+
+        const users = await userRepository.find();
 
         res.json(users);
     };
 
     public async getUser(req: Request, res: Response) {
 
+        const userRepository: Repository<User> = getRepository(User);
+
         const { id } = req.params;
-        const user = await this.userRepository.findOne(id);
+        const user = await userRepository.findOne(id);
 
         if (user) {
             res.json({
@@ -39,9 +37,11 @@ export default class UserController {
     public async createUser(req: Request, res: Response) {
 
         try {
+            const userRepository: Repository<User> = getRepository(User);
+
             const { body } = req;
 
-            const emailExists = await this.userRepository.findOne({
+            const emailExists = await userRepository.findOne({
                 where: {
                     email: body.email
                 }
@@ -68,8 +68,8 @@ export default class UserController {
             user.userRole = body.role;
             user.state = true;*/
 
-            const user: User[] = await this.userRepository.create(body);
-            const results: User[] = await this.userRepository.save(user);
+            const user: User[] = await userRepository.create(body);
+            const results: User[] = await userRepository.save(user);
 
             res.json({
                 error: 0,
@@ -90,8 +90,9 @@ export default class UserController {
         const { body } = req;
 
         try {
+            const userRepository: Repository<User> = getRepository(User);
 
-            const user = await this.userRepository.findOne(id);
+            const user = await userRepository.findOne(id);
             if (!user) {
                 return res.status(404).json({
                     error: 1,
@@ -107,8 +108,8 @@ export default class UserController {
                 delete body.id;
             */
 
-            this.userRepository.merge(user, body);
-            const results = await this.userRepository.save(user);
+            userRepository.merge(user, body);
+            const results = await userRepository.save(user);
 
             res.json({
                 error: 0,
@@ -128,17 +129,19 @@ export default class UserController {
     public async deleteUser(req: Request, res: Response) {
         const { id } = req.params;
 
-        const user = await this.userRepository.findOne(id);
+        const userRepository: Repository<User> = getRepository(User);
+
+        const user = await userRepository.findOne(id);
         if (!user) {
             return res.status(404).json({
                 error: 1,
                 msg: 'There is no user with the ID ' + id
             });
         }
-        
-        this.userRepository.merge(user, { state: false });
-        const results = await this.userRepository.save(user);
-        
+
+        userRepository.merge(user, { state: false });
+        const results = await userRepository.save(user);
+
         //await user.update({ state: 0 });
         res.json({
             error: 0,

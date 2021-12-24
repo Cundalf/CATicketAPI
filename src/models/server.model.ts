@@ -8,15 +8,13 @@ import fileUpload from 'express-fileupload';
 
 // Rutas
 import Auth from '../routes/auth.route';
+import User from '../routes/user.route';
 //import Censo from '../routes/Censo';
 //import Cco from '../routes/Cco';
 
 // Logs
 import logger from '../libs/logger.lib';
 import morgan, { StreamOptions } from 'morgan';
-
-// Database Connection
-import { createConnection } from 'typeorm';
 
 // Type para gestionar las rutas.
 type PathsAPI = {
@@ -59,25 +57,6 @@ class Server {
         this.middlewares();
         this.logging();
         this.routes();
-        this.database();
-    }
-
-    private database(): void {
-
-        createConnection({
-            type: 'mysql',
-            host: process.env.DB_HOST,
-            port: parseInt(process.env.DB_PORT!),
-            username: process.env.DB_USER,
-            password: process.env.DB_PASS,
-            database: process.env.DB_NAME,
-            entities: [
-                __dirname + '/entities/*.entity.js'
-            ],
-            synchronize: true,
-        }).then(connection => {
-            console.log('Conectado');
-        }).catch(error => console.log(error));
     }
 
     // Configura los middlewares que necesitamos en express
@@ -149,6 +128,7 @@ class Server {
 
         //* Rutas de servicios
         this.app.use(this.paths.auth, Auth);
+        this.app.use(this.paths.user, User);
     }
 
     // Crea si no existe una instancia de la clase. Retorna la instancia en memoria.

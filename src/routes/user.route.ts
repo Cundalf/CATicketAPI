@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { check } from 'express-validator';
+//import { check } from 'express-validator';
 
-import validateFields from '../middlewares/validator.middleware';
-import AuthController from '../controllers/auth.controller';
+//import validateFields from '../middlewares/validator.middleware';
+import UserController from '../controllers/user.controller';
 
 const router = Router();
 
@@ -14,8 +14,12 @@ const router = Router();
 ]
 */
 
-const authController = new AuthController();
+const userController = new UserController();
 
-router.post('/', authController.auth);
+router.get('/', userController.getAllUsers);
+router.get('/:id', userController.getUser);
+router.post('/', userController.createUser);
+router.put('/:id', userController.updateUser);
+router.delete('/', userController.deleteUser);
 
 export default router;
