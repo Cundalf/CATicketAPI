@@ -16,6 +16,10 @@ export default async function connectDatabase(): Promise<void> {
         ],
         synchronize: true,
     }).then(connection => {
-        console.log('Conectado');
-    }).catch(error => console.log(error));
+        console.log(`Connected to ${connection.driver.database}`);
+    }).catch(
+        error => { 
+            throw new Error(`Database Error: ${error.code} \n (${error.sqlMessage})`);
+        }
+    );
 }

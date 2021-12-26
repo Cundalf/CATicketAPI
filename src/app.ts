@@ -16,7 +16,6 @@ import connectDatabase from './database/default.database';
     process.env.NODE_ENV = process.env.NODE_ENV || 'development';
     
     await connectDatabase();
-    console.log("test");
     
     // Cargo el server
     const server: Server = Server.loadServer();
