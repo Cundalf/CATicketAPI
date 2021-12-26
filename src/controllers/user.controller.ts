@@ -43,7 +43,7 @@ export default class UserController {
 
             const emailExists = await userRepository.findOne({
                 where: {
-                    email: body.email
+                    email: body.userEmail
                 }
             });
 
@@ -55,18 +55,10 @@ export default class UserController {
             }
 
             const salt = bcrypt.genSaltSync();
-            body.password = bcrypt.hashSync(body.password, salt);
+            body.userPassword = bcrypt.hashSync(body.userPassword, salt);
 
-            if (_.isUndefined(body.role))
-                body.role = UserRole.USER;
-
-            /*let user = new User();
-            user.userEmail = body.email;
-            user.userFirstName = body.firstName;
-            user.userLastName = body.lastName;
-            user.userPassword = body.password;
-            user.userRole = body.role;
-            user.state = true;*/
+            if (_.isUndefined(body.userRole))
+                body.userRole = UserRole.USER;
 
             const user: User[] = await userRepository.create(body);
             const results: User[] = await userRepository.save(user);
@@ -139,10 +131,9 @@ export default class UserController {
             });
         }
 
-        userRepository.merge(user, { state: false });
+        userRepository.merge(user, { userState: false });
         const results = await userRepository.save(user);
-
-        //await user.update({ state: 0 });
+        
         res.json({
             error: 0,
             msg: "OK",

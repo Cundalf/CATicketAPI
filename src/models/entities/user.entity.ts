@@ -34,5 +34,5 @@ export default class User {
         type: 'tinyint',
         default: 1
     })
-    state!: boolean;
+    userState!: boolean;
 };
