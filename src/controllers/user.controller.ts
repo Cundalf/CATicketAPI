@@ -54,7 +54,7 @@ export default class UserController {
             if (emailExists) {
                 return res.status(400).json({
                     error: 1,
-                    msg: 'Email already registered: ' + body.email
+                    msg: 'Email already registered: ' + body.userEmail
                 });
             }
 
@@ -134,7 +134,7 @@ export default class UserController {
 
         userRepository.merge(user, { userState: false });
         const results = await userRepository.save(user);
-        
+
         res.json({
             error: 0,
             msg: "OK",

@@ -1,30 +1,63 @@
 import { Request, Response } from 'express';
-import { getRepository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import User, { UserRole } from '../models/entities/user.entity';
+import bcrypt from 'bcrypt';
+import { ISession } from '../interfaces/auth.interface';
+import generateJWT from '../helpers/jwt.helper';
 
 export default class AuthController {
-    
-    public async auth (req: Request, res: Response) {
 
-        /*
-        // you can also get it via getConnection().getRepository() or getManager().getRepository()
-        const userRepository = getRepository(User); 
+    public async auth(req: Request, res: Response) {
+        try {
+            const userRepository: Repository<User> = getRepository(User);
+            let { email, password } = req.body;
 
-        let user = new User();
-        user.userEmail = "acundari@laslomas.com.ar";
-        user.userFirstName = "Agustin";
-        user.userLastName = "Cundari";
-        user.userPassword = "123456789";
-        user.userRole = UserRole.ADMIN;
-        user.state = true;
+            const userDB = await userRepository.findOne({
+                where: {
+                    userEmail: email
+                }
+            });
 
-        await userRepository.save(user);
+            if (!userDB) {
+                return res.status(403).json({
+                    error: 1,
+                    msg: 'User or password invalid'
+                });
+            }
 
-        //const user = await userRepository.findOne(1);
-        const users = await userRepository.find();
+            const validPassword = bcrypt.compareSync(password, userDB.userPassword);
 
-        res.json(users);
-        
-        */
+            if (!validPassword) {
+                return res.status(403).json({
+                    error: 1,
+                    msg: 'User or password invalid'
+                });
+            }
+
+            if (!userDB.userState) {
+                return res.status(400).json({
+                    error: 2,
+                    msg: 'User disabled'
+                });
+            }
+
+            const sessionData: ISession = {
+                userId: userDB.userId,
+                userRole: userDB.userRole
+            };
+
+            const token = await generateJWT(sessionData);
+
+            res.json({
+                error: 0,
+                token
+            });
+
+        } catch (error) {
+            res.status(500).json({
+                error: 3,
+                msg: 'Service not available'
+            });
+        }
     }
 }

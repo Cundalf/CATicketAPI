@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { ISession } from '../interfaces/auth.interface';
 
-export default (payload: object) => {
+export default (payload: ISession) => {
 
     return new Promise((resolve, reject) => {
 
