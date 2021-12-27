@@ -1,7 +1,7 @@
-/*
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/database/user.model';
+import User, { UserRole } from '../models/entities/user.entity';
+import { Repository, getRepository } from 'typeorm';
 
 export const validateJWT = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -15,6 +15,7 @@ export const validateJWT = async (req: Request, res: Response, next: NextFunctio
     }
 
     jwt.verify(token, process.env.SEED_TOKEN || 'T0k3nD3f49lt', async (err, decoded) => {
+
         if (err || !decoded) {
             return res.status(401).json({
                 status: false,
@@ -25,7 +26,9 @@ export const validateJWT = async (req: Request, res: Response, next: NextFunctio
         }
 
         try {
-            const user = await User.findByPk(decoded.uid);
+            const userRepository: Repository<User> = getRepository(User);
+
+            const user = await userRepository.findOne(decoded.userId);
 
             if (!user) {
                 return res.status(401).json({
@@ -34,7 +37,7 @@ export const validateJWT = async (req: Request, res: Response, next: NextFunctio
                 });
             }
 
-            if (!user.state) {
+            if (!user.userState) {
                 return res.status(401).json({
                     error: 1,
                     msg: 'Invalid token'
@@ -62,7 +65,7 @@ export const validateJWT = async (req: Request, res: Response, next: NextFunctio
     });
 };
 
-const validateAdminJWT = async (req, res, next) => {
+const validateAdminJWT = async (req: Request, res: Response, next: NextFunction) => {
 
     const token = req.header('x-token');
 
@@ -73,50 +76,66 @@ const validateAdminJWT = async (req, res, next) => {
         });
     }
 
-    try {
 
-        const { uid } = jwt.verify(token, process.env.PRIVATEKEY);
 
-        const user = await User.findByPk(uid);
+    jwt.verify(token, process.env.SEED_TOKEN || 'T0k3nD3f49lt', async (err, decoded) => {
 
-        if (!user) {
+        if (err || !decoded) {
             return res.status(401).json({
+                status: false,
+                err: {
+                    message: 'Invalid Token'
+                }
+            });
+        }
+
+        try {
+
+            const userRepository: Repository<User> = getRepository(User);
+            const user = await userRepository.findOne(decoded.userId);
+
+            if (!user) {
+                return res.status(401).json({
+                    error: 1,
+                    msg: 'Invalid token'
+                });
+            }
+
+            if (!user.userState) {
+                return res.status(403).json({
+                    error: 1,
+                    msg: 'Unauthorized user'
+                });
+            }
+
+            if (user.userRole != UserRole.ADMIN) {
+                return res.status(403).json({
+                    error: 1,
+                    msg: 'Unauthorized user'
+                });
+            }
+
+            res.locals = {
+                ...res.locals,
+                session: {
+                    user: decoded.user,
+                    type: decoded.type
+                }
+            };
+            next();
+
+        } catch (error) {
+
+            console.log(error);
+            res.status(401).json({
                 error: 1,
                 msg: 'Invalid token'
             });
         }
-
-        if (!user.state) {
-            return res.status(403).json({
-                error: 1,
-                msg: 'Unauthorized user'
-            });
-        }
-
-        if (user.role != process.env.ADMINID) {
-            return res.status(403).json({
-                error: 1,
-                msg: 'Unauthorized user'
-            });
-        }
-
-        req.user = user;
-        next();
-
-    } catch (error) {
-
-        console.log(error);
-        res.status(401).json({
-            error: 1,
-            msg: 'Invalid token'
-        });
-    }
-
+    });
 };
 
 module.exports = {
     validateJWT,
     validateAdminJWT
 };
-
-*/
