@@ -9,7 +9,11 @@ export default class UserController {
     public async getAllUsers(req: Request, res: Response) {
         const userRepository: Repository<User> = getRepository(User);
 
-        const users = await userRepository.find();
+        const users = await userRepository.find({
+            where: {
+                userState: true
+            }
+        });
 
         res.json(users);
     };
@@ -43,7 +47,7 @@ export default class UserController {
 
             const emailExists = await userRepository.findOne({
                 where: {
-                    email: body.userEmail
+                    userEmail: body.userEmail
                 }
             });
 
@@ -57,7 +61,7 @@ export default class UserController {
             const salt = bcrypt.genSaltSync();
             body.userPassword = bcrypt.hashSync(body.userPassword, salt);
 
-            if (_.isUndefined(body.userRole))
+            if (!body.userRole)
                 body.userRole = UserRole.USER;
 
             const user: User[] = await userRepository.create(body);
@@ -92,13 +96,10 @@ export default class UserController {
                 });
             }
 
-            const salt = bcrypt.genSaltSync();
-            body.password = bcrypt.hashSync(body.password, salt);
-
-            /*
-            if (!_.isUndefined(body.id))
-                delete body.id;
-            */
+            if (body.userPassword) {
+                const salt = bcrypt.genSaltSync();
+                body.userPassword = bcrypt.hashSync(body.userPassword, salt);
+            }
 
             userRepository.merge(user, body);
             const results = await userRepository.save(user);
