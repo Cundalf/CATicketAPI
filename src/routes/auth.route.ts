@@ -6,16 +6,12 @@ import AuthController from '../controllers/auth.controller';
 
 const router = Router();
 
-/*
-, [
+const authController = new AuthController();
+
+router.post('/', [
     check('email', 'Email is required').isEmail(),
     check('password', 'Password is required').not().isEmpty(),
     validateFields
-]
-*/
-
-const authController = new AuthController();
-
-router.post('/', authController.auth);
+], authController.auth);
 
 export default router;
