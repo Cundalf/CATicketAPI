@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User, { UserRole } from '../models/entities/user.entity';
 import { Repository, getRepository } from 'typeorm';
-import { ISession } from '../interfaces/auth.interface';
+import ISession from '../interfaces/auth.interface';
 
 export const validateJWT = async (req: Request, res: Response, next: NextFunction) => {
 
