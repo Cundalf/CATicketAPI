@@ -1,13 +1,15 @@
 import { Request, Response } from 'express';
 import { getRepository, Repository } from "typeorm";
-import User from '../models/entities/user.entity';
 import bcrypt from 'bcrypt';
+
+import User from '../models/entities/user.entity';
 import { ISession } from '../interfaces/auth.interface';
 import generateJWT from '../helpers/jwt.helper';
+import IAuthResponse from '../interfaces/authResponse.interface';
 
 export default class AuthController {
 
-    public async auth(req: Request, res: Response) {
+    public async auth(req: Request, res: Response): Promise<void> {
         try {
             const userRepository: Repository<User> = getRepository(User);
             let { email, password } = req.body;
@@ -19,26 +21,38 @@ export default class AuthController {
             });
 
             if (!userDB) {
-                return res.status(403).json({
-                    error: 1,
-                    msg: 'User or password invalid'
-                });
+                const response: IAuthResponse = {
+                    error: true,
+                    message: 'User or password invalid'
+                }
+
+                res.status(403).json(response);
+                return;
             }
 
             const validPassword: boolean = bcrypt.compareSync(password, userDB.userPassword);
 
             if (!validPassword) {
-                return res.status(403).json({
-                    error: 1,
-                    msg: 'User or password invalid'
-                });
+
+                const response: IAuthResponse = {
+                    error: true,
+                    message: 'User or password invalid'
+                }
+
+                res.status(403).json(response);
+                return;
             }
 
             if (!userDB.userState) {
-                return res.status(400).json({
-                    error: 2,
-                    msg: 'User disabled'
-                });
+
+                const response: IAuthResponse = {
+                    error: true,
+                    message: 'User disabled'
+                }
+
+                res.status(400).json(response);
+
+                return;
             }
 
             const sessionData: ISession = {
@@ -48,16 +62,24 @@ export default class AuthController {
 
             const token: string = await generateJWT(sessionData);
 
-            res.json({
-                error: 0,
+            const response: IAuthResponse = {
+                error: false,
+                message: 'Login successful',
                 token
-            });
+            }
+
+            res.json(response);
 
         } catch (error) {
-            res.status(500).json({
-                error: 3,
-                msg: 'Service not available'
-            });
+
+            console.log(error);
+
+            const response: IAuthResponse = {
+                error: true,
+                message: 'Service not available'
+            }
+
+            res.status(500).json(response);
         }
     }
 }
