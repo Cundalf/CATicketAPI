@@ -12,7 +12,7 @@ export default class AuthController {
             const userRepository: Repository<User> = getRepository(User);
             let { email, password } = req.body;
 
-            const userDB = await userRepository.findOne({
+            const userDB: (User | undefined) = await userRepository.findOne({
                 where: {
                     userEmail: email
                 }
@@ -25,7 +25,7 @@ export default class AuthController {
                 });
             }
 
-            const validPassword = bcrypt.compareSync(password, userDB.userPassword);
+            const validPassword: boolean = bcrypt.compareSync(password, userDB.userPassword);
 
             if (!validPassword) {
                 return res.status(403).json({
@@ -46,7 +46,7 @@ export default class AuthController {
                 userRole: userDB.userRole
             };
 
-            const token = await generateJWT(sessionData);
+            const token: string = await generateJWT(sessionData);
 
             res.json({
                 error: 0,

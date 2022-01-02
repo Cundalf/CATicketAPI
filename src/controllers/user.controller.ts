@@ -11,7 +11,7 @@ export default class UserController implements ICrudController {
     public async getAll(req: Request, res: Response): Promise<void> {
         const userRepository: Repository<User> = getRepository(User);
 
-        const users = await userRepository.find({
+        const users: User[] = await userRepository.find({
             select: [
                 'userId',
                 'userFirstName',
@@ -38,7 +38,7 @@ export default class UserController implements ICrudController {
         const userRepository: Repository<User> = getRepository(User);
 
         const { id } = req.params;
-        const user = await userRepository.findOne(id, {
+        const user: (User | undefined) = await userRepository.findOne(id, {
             select: [
                 'userId',
                 'userFirstName',
@@ -76,7 +76,7 @@ export default class UserController implements ICrudController {
 
             const { body } = req;
 
-            const emailExists = await userRepository.findOne({
+            const emailExists: (User | undefined) = await userRepository.findOne({
                 where: {
                     userEmail: body.userEmail
                 }
@@ -130,7 +130,7 @@ export default class UserController implements ICrudController {
         try {
             const userRepository: Repository<User> = getRepository(User);
 
-            const user = await userRepository.findOne(id);
+            const user: (User | undefined) = await userRepository.findOne(id);
             if (!user) {
                 const response: ICrudResponse = {
                     error: true,
@@ -182,7 +182,7 @@ export default class UserController implements ICrudController {
 
         const userRepository: Repository<User> = getRepository(User);
 
-        const user = await userRepository.findOne(id);
+        const user: (User | undefined) = await userRepository.findOne(id);
 
         if (!user) {
 
@@ -198,11 +198,11 @@ export default class UserController implements ICrudController {
         }
 
         userRepository.merge(user, { userState: false });
-        const results = await userRepository.save(user);
+        const results: User = await userRepository.save(user);
 
         const response: ICrudResponse = {
             error: true,
-            message: `User #${id} disabled`,
+            message: `User #${results.userId} disabled`,
             data: null
         }
 

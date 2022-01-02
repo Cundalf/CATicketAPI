@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { ISession } from '../interfaces/auth.interface';
 
-export default (payload: ISession) => {
+export default (payload: ISession): Promise<string> => {
 
     return new Promise((resolve, reject) => {
 
@@ -11,7 +11,7 @@ export default (payload: ISession) => {
             if (err) {
                 reject('Invalid token');
             } else {
-                resolve(token);
+                resolve(token || "");
             }
         });
 
