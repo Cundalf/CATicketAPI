@@ -9,8 +9,6 @@ import fileUpload from 'express-fileupload';
 // Rutas
 import Auth from '../routes/auth.route';
 import User from '../routes/user.route';
-//import Censo from '../routes/Censo';
-//import Cco from '../routes/Cco';
 
 // Logs
 import logger from '../libs/logger.lib';

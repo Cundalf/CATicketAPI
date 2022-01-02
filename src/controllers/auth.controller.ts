@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository, Repository } from "typeorm";
-import User, { UserRole } from '../models/entities/user.entity';
+import User from '../models/entities/user.entity';
 import bcrypt from 'bcrypt';
 import { ISession } from '../interfaces/auth.interface';
 import generateJWT from '../helpers/jwt.helper';
