@@ -3,7 +3,7 @@ import { getRepository, Repository } from "typeorm";
 import bcrypt from 'bcrypt';
 
 import User from '../models/entities/user.entity';
-import { ISession } from '../interfaces/auth.interface';
+import ISession from '../interfaces/auth.interface';
 import generateJWT from '../helpers/jwt.helper';
 import IAuthResponse from '../interfaces/authResponse.interface';
 

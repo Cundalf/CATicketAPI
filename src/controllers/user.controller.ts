@@ -3,8 +3,8 @@ import { getRepository, Repository } from 'typeorm';
 import User, { UserRole } from '../models/entities/user.entity';
 import bcrypt from 'bcrypt';
 import _ from 'underscore';
-import { ICrudController } from '../interfaces/crudController.interface';
-import { ICrudResponse } from '../interfaces/crudResponse.interface';
+import ICrudController from '../interfaces/crudController.interface';
+import ICrudResponse from '../interfaces/crudResponse.interface';
 
 export default class UserController implements ICrudController {
 

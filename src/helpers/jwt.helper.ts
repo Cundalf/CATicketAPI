@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { ISession } from '../interfaces/auth.interface';
+import ISession from '../interfaces/auth.interface';
 
 export default (payload: ISession): Promise<string> => {
 

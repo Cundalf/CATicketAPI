@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-export interface ICrudController {
+export default interface ICrudController {
     getAll: (req: Request, res: Response) => Promise<void>;
     getOne: (req: Request, res: Response) => Promise<void>;
     create: (req: Request, res: Response) => Promise<void>;
