@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository, Repository, Entity } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import User, { UserRole } from '../models/entities/user.entity';
 import bcrypt from 'bcrypt';
 import _ from 'underscore';
