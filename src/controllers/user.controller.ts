@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository, Repository } from "typeorm";
+import { getRepository, Repository, Entity } from 'typeorm';
 import User, { UserRole } from '../models/entities/user.entity';
 import bcrypt from 'bcrypt';
 import _ from 'underscore';
@@ -12,6 +12,13 @@ export default class UserController implements ICrudController {
         const userRepository: Repository<User> = getRepository(User);
 
         const users = await userRepository.find({
+            select: [
+                'userId',
+                'userFirstName',
+                'userLastName',
+                'userEmail',
+                'userRole',
+            ],
             where: {
                 userState: true
             }
@@ -31,13 +38,21 @@ export default class UserController implements ICrudController {
         const userRepository: Repository<User> = getRepository(User);
 
         const { id } = req.params;
-        const user = await userRepository.findOne(id);
+        const user = await userRepository.findOne(id, {
+            select: [
+                'userId',
+                'userFirstName',
+                'userLastName',
+                'userEmail',
+                'userRole',
+            ]
+        });
 
         if (user) {
 
             const response: ICrudResponse = {
                 error: false,
-                message: `User ${id} data`,
+                message: `User #${id} data`,
                 data: user
             }
 
@@ -84,13 +99,13 @@ export default class UserController implements ICrudController {
             if (!body.userRole)
                 body.userRole = UserRole.USER;
 
-            const user: User[] = await userRepository.create(body);
-            const results: User[] = await userRepository.save(user);
+            const user: User = userRepository.create({ ...body } as Object);
+            const results: User = await userRepository.save(user);
 
             const response: ICrudResponse = {
                 error: false,
-                message: 'User created',
-                data: results
+                message: `User #${results.userId} created`,
+                data: null
             }
 
             res.json(response);
@@ -133,12 +148,17 @@ export default class UserController implements ICrudController {
             }
 
             userRepository.merge(user, body);
-            const results = await userRepository.save(user);
+            const result: User = await userRepository.save(user);
 
             const response: ICrudResponse = {
                 error: false,
                 message: `User #${id} updated`,
-                data: results
+                data: {
+                    userId: result.userId,
+                    userFirstName: result.userFirstName,
+                    userLastName: result.userLastName,
+                    userRole: result.userRole
+                }
             }
 
             res.json(response);
@@ -183,7 +203,7 @@ export default class UserController implements ICrudController {
         const response: ICrudResponse = {
             error: true,
             message: `User #${id} disabled`,
-            data: results
+            data: null
         }
 
         res.json(response);
