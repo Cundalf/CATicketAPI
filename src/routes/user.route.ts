@@ -9,8 +9,8 @@ import { validateUserRole } from '../middlewares/user.middleware';
 const router = Router();
 const userController = new UserController();
 
-router.get('/', validateJWT, userController.getAllUsers);
-router.get('/:id', validateJWT, userController.getUser);
+router.get('/', validateJWT, userController.getAll);
+router.get('/:id', validateJWT, userController.getOne);
 router.post('/', [
     validateAdminJWT,
     check('userFirstName', 'userFirstName is required').not().isEmpty(),
@@ -22,7 +22,7 @@ router.post('/', [
     check('userState', 'userState invalid').optional().isBoolean(),
     validateUserRole,
     validateFields
-], userController.createUser);
+], userController.create);
 router.put('/:id', [
     validateAdminJWT,
     check('userFirstName', 'userFirstName is required').optional().not().isEmpty(),
@@ -34,7 +34,7 @@ router.put('/:id', [
     check('userState', 'userState invalid').optional().isBoolean(),
     validateUserRole,
     validateFields
-], validateAdminJWT, userController.updateUser);
-router.delete('/:id', validateAdminJWT, userController.deleteUser);
+], validateAdminJWT, userController.update);
+router.delete('/:id', validateAdminJWT, userController.delete);
 
 export default router;

@@ -3,10 +3,12 @@ import { getRepository, Repository } from "typeorm";
 import User, { UserRole } from '../models/entities/user.entity';
 import bcrypt from 'bcrypt';
 import _ from 'underscore';
+import { ICrudController } from '../interfaces/crudController.interface';
+import { ICrudResponse } from '../interfaces/crudResponse.interface';
 
-export default class UserController {
+export default class UserController implements ICrudController {
 
-    public async getAllUsers(req: Request, res: Response) {
+    public async getAll(req: Request, res: Response): Promise<void> {
         const userRepository: Repository<User> = getRepository(User);
 
         const users = await userRepository.find({
@@ -15,10 +17,16 @@ export default class UserController {
             }
         });
 
-        res.json(users);
+        const response: ICrudResponse = {
+            error: false,
+            message: "List of users",
+            data: users
+        }
+
+        res.json(response);
     };
 
-    public async getUser(req: Request, res: Response) {
+    public async getOne(req: Request, res: Response): Promise<void> {
 
         const userRepository: Repository<User> = getRepository(User);
 
@@ -26,19 +34,27 @@ export default class UserController {
         const user = await userRepository.findOne(id);
 
         if (user) {
-            res.json({
-                error: 0,
+
+            const response: ICrudResponse = {
+                error: false,
+                message: `User ${id} data`,
                 data: user
-            });
+            }
+
+            res.json(response);
         } else {
-            res.status(404).json({
-                error: 1,
-                msg: `There is no user with the ID: ${id}`
-            });
+
+            const response: ICrudResponse = {
+                error: true,
+                message: `There is no user with the ID: ${id}`,
+                data: null
+            }
+
+            res.status(404).json(response);
         }
     }
 
-    public async createUser(req: Request, res: Response) {
+    public async create(req: Request, res: Response): Promise<void> {
 
         try {
             const userRepository: Repository<User> = getRepository(User);
@@ -52,10 +68,14 @@ export default class UserController {
             });
 
             if (emailExists) {
-                return res.status(400).json({
-                    error: 1,
-                    msg: 'Email already registered: ' + body.userEmail
-                });
+                const response: ICrudResponse = {
+                    error: true,
+                    message: 'Email already registered: ' + body.userEmail,
+                    data: null
+                }
+
+                res.status(400).json(response);
+                return;
             }
 
             const salt = bcrypt.genSaltSync();
@@ -67,21 +87,28 @@ export default class UserController {
             const user: User[] = await userRepository.create(body);
             const results: User[] = await userRepository.save(user);
 
-            res.json({
-                error: 0,
+            const response: ICrudResponse = {
+                error: false,
+                message: 'User created',
                 data: results
-            });
+            }
+
+            res.json(response);
 
         } catch (error) {
             console.log(error);
-            res.status(500).json({
-                error: 1,
-                msg: 'Service not available'
-            });
+
+            const response: ICrudResponse = {
+                error: true,
+                message: 'Service not available',
+                data: null
+            }
+
+            res.status(500).json(response);
         }
     }
 
-    public async updateUser(req: Request, res: Response) {
+    public async update(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
         const { body } = req;
 
@@ -90,10 +117,14 @@ export default class UserController {
 
             const user = await userRepository.findOne(id);
             if (!user) {
-                return res.status(404).json({
-                    error: 1,
-                    msg: 'There is no user with the ID ' + id
-                });
+                const response: ICrudResponse = {
+                    error: true,
+                    message: 'There is no user with the ID ' + id,
+                    data: null
+                }
+
+                res.status(404).json(response);
+                return;
             }
 
             if (body.userPassword) {
@@ -104,41 +135,57 @@ export default class UserController {
             userRepository.merge(user, body);
             const results = await userRepository.save(user);
 
-            res.json({
-                error: 0,
+            const response: ICrudResponse = {
+                error: false,
+                message: `User #${id} updated`,
                 data: results
-            });
+            }
+
+            res.json(response);
 
         } catch (error) {
 
             console.log(error);
-            res.status(500).json({
-                error: 1,
-                msg: 'Service not available'
-            });
+
+            const response: ICrudResponse = {
+                error: true,
+                message: 'Service not available',
+                data: null
+            }
+
+            res.status(500).json(response);
         }
     }
 
-    public async deleteUser(req: Request, res: Response) {
+    public async delete(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
 
         const userRepository: Repository<User> = getRepository(User);
 
         const user = await userRepository.findOne(id);
+
         if (!user) {
-            return res.status(404).json({
-                error: 1,
-                msg: 'There is no user with the ID ' + id
-            });
+
+            const response: ICrudResponse = {
+                error: true,
+                message: 'There is no user with the ID ' + id,
+                data: null
+            }
+
+            res.status(404).json(response);
+
+            return;
         }
 
         userRepository.merge(user, { userState: false });
         const results = await userRepository.save(user);
 
-        res.json({
-            error: 0,
-            msg: "OK",
+        const response: ICrudResponse = {
+            error: true,
+            message: `User #${id} disabled`,
             data: results
-        });
+        }
+
+        res.json(response);
     }
 }
