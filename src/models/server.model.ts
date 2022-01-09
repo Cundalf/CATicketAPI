@@ -10,6 +10,7 @@ import fileUpload from 'express-fileupload';
 import Auth from '../routes/auth.route';
 import User from '../routes/user.route';
 import Priority from '../routes/priority.route';
+import Headquarter from '../routes/headquarter.route';
 
 // Logs
 import logger from '../libs/logger.lib';
@@ -22,7 +23,8 @@ type PathsAPI = {
     auth: string,
     user: string,
     employeeDevice: string,
-    priority: string
+    priority: string,
+    headquarter: string
 };
 
 class Server {
@@ -50,7 +52,8 @@ class Server {
             auth: '/auth',
             user: '/user',
             employeeDevice: '/employee/device',
-            priority: '/priority'
+            priority: '/priority',
+            headquarter: '/headquarter'
         };
 
         logger.info('Server instanciado');
@@ -131,6 +134,7 @@ class Server {
         this.app.use(this.paths.auth, Auth);
         this.app.use(this.paths.user, User);
         this.app.use(this.paths.priority, Priority);
+        this.app.use(this.paths.headquarter, Headquarter);
     }
 
     // Crea si no existe una instancia de la clase. Retorna la instancia en memoria.
